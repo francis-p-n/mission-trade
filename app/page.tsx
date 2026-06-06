@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createSession } from '@/lib/session-engine'
 
 export default function HomePage() {
   const router = useRouter()

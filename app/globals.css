@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--bg-primary);
+  color: #f1f5f9;
+  min-height: 100dvh;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+/* Glass card effect */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.08) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Pulse ring */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* Value change flash */
+@keyframes value-flash-up {
+  0% { color: inherit; }
+  30% { color: #10b981; background-color: rgba(16, 185, 129, 0.15); }
+  100% { color: inherit; background-color: transparent; }
+}
+
+@keyframes value-flash-down {
+  0% { color: inherit; }
+  30% { color: #ef4444; background-color: rgba(239, 68, 68, 0.15); }
+  100% { color: inherit; background-color: transparent; }
+}
+
+.flash-up {
+  animation: value-flash-up 1s ease-out;
+}
+
+.flash-down {
+  animation: value-flash-down 1s ease-out;
+}
+
+/* Intro overlay */
+@keyframes intro-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes intro-fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.intro-entering {
+  animation: intro-fade-in 1.2s ease-in-out forwards;
+}
+
+.intro-exiting {
+  animation: intro-fade-out 0.8s ease-in-out forwards;
+}
+
+/* Surging path glow */
+@keyframes surge-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 60px rgba(16, 185, 129, 0.6), 0 0 100px rgba(16, 185, 129, 0.3); }
+}
+
+.surge-active {
+  animation: surge-glow 1.5s ease-in-out infinite;
+}
+
+/* Confetti burst */
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}

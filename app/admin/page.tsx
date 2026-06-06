@@ -95,7 +95,7 @@ export default function AdminIndexPage() {
 
           <div className="glass rounded-2xl p-6 space-y-4">
             <h2 className="font-bold text-white">Resume Session</h2>
-            <form onSubmit={handleGoTo} className="space-y-3">
+            <div className="space-y-3">
               <input
                 type="text"
                 value={sessionCode}
@@ -104,13 +104,26 @@ export default function AdminIndexPage() {
                 maxLength={4}
                 className="w-full py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 font-mono text-center text-xl tracking-widest focus:outline-none focus:border-blue-500/50 transition-all"
               />
-              <button
-                type="submit"
-                className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold transition-all active:scale-95"
-              >
-                Go to Session
-              </button>
-            </form>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const code = sessionCode.trim().toUpperCase()
+                    if (code.length >= 4) router.push(`/presenter/${code}`)
+                  }}
+                  className="flex-1 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-semibold transition-all active:scale-95 border border-white/10"
+                >
+                  Presenter
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => handleGoTo(e as any)}
+                  className="flex-1 py-3 rounded-xl bg-blue-600/50 hover:bg-blue-500/50 text-white font-semibold transition-all active:scale-95 border border-blue-500/50"
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

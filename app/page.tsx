@@ -6,21 +6,8 @@ import { createSession } from '@/lib/session-engine'
 
 export default function HomePage() {
   const router = useRouter()
-  const [creating, setCreating] = useState(false)
   const [joinCode, setJoinCode] = useState('')
   const [error, setError] = useState('')
-
-  async function handleCreateSession() {
-    setCreating(true)
-    setError('')
-    const result = await createSession()
-    if (result) {
-      router.push(`/admin/${result.sessionCode}`)
-    } else {
-      setError('Failed to create session. Check your Supabase connection.')
-      setCreating(false)
-    }
-  }
 
   function handleJoinSession(e: React.FormEvent) {
     e.preventDefault()
@@ -61,15 +48,15 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl">🎮</div>
               <div>
                 <p className="font-semibold text-white">Facilitator</p>
-                <p className="text-sm text-slate-400">Create and run a session</p>
+                <p className="text-sm text-slate-400">Manage your game sessions</p>
               </div>
             </div>
+            
             <button
-              onClick={handleCreateSession}
-              disabled={creating}
-              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
+              onClick={() => router.push('/admin')}
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-semibold transition-all duration-200 shadow-lg shadow-blue-500/20"
             >
-              {creating ? 'Creating Session...' : 'Create New Session'}
+              Admin Login
             </button>
           </div>
 

@@ -213,10 +213,10 @@ export default function PresenterPage() {
       {/* Main content */}
       <div className="relative z-10 flex flex-1 gap-6 p-6 min-h-0">
         {/* Left: Paths */}
-        <div className="flex-1 grid grid-cols-2 gap-4">
+        <div className="flex-1 flex flex-col min-h-0">
           {session?.status === 'lobby' ? (
             // Lobby state: show QR code
-            <div className="col-span-2 flex flex-col items-center justify-center gap-8">
+            <div className="flex-1 flex flex-col items-center justify-center gap-8">
               <div className="space-y-2 text-center">
                 <h2 className="text-4xl font-black">Join Now</h2>
                 <p className="text-slate-400 text-xl">Scan the QR code or enter the session code on your phone</p>
@@ -254,61 +254,67 @@ export default function PresenterPage() {
               </div>
             </div>
           ) : (
-            sortedPaths.map((path) => {
-              const meta = PATH_META[path.key as keyof typeof PATH_META]
-              const forecast = getForecastLabel(path)
-              const hint = getStudentForecastHint(path.key, path.visible_trend)
-              const playerCount = players.filter((p) => p.current_path_id === path.id).length
-              const isSurging = path.visible_trend === 'surging'
-
-              return (
-                <div
-                  key={path.id}
-                  className={`glass rounded-2xl p-5 flex flex-col gap-3 border ${meta.borderClass} ${isSurging ? 'surge-active' : ''} transition-all duration-500`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-xl ${meta.bgClass} flex items-center justify-center text-2xl`}>
-                        {meta.icon}
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-white text-lg">{meta.name}</h3>
-                        <p className="text-sm text-slate-400">{hint}</p>
-                      </div>
-                    </div>
-                    <div className={`text-2xl font-black ${forecast.color}`}>
-                      {forecast.arrow}
-                    </div>
-                  </div>
-
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-xs text-slate-500 mb-1">Current Value</p>
-                      <p className="text-4xl font-black text-white tabular-nums">
-                        {path.current_value.toFixed(1)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${forecast.color} ${meta.bgClass} border ${meta.borderClass}`}>
-                        {forecast.label}
-                      </div>
-                      <p className="text-xs text-slate-500 mt-2">{playerCount} player{playerCount !== 1 ? 's' : ''}</p>
-                    </div>
-                  </div>
-
-                  {/* Value bar */}
-                  <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-700"
-                      style={{
-                        width: `${Math.min(100, (path.current_value / 300) * 100)}%`,
-                        backgroundColor: meta.color,
-                      }}
-                    />
-                  </div>
+            <div className="flex-1 glass rounded-3xl p-8 flex flex-col">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                  <span>📊</span> Market Overview
+                </h2>
+                <div className="text-sm text-slate-400 font-semibold bg-white/5 px-4 py-1.5 rounded-full">
+                  Values out of 300
                 </div>
-              )
-            })
+              </div>
+              
+              <div className="flex-1 flex flex-col justify-around gap-6">
+                {sortedPaths.map((path) => {
+                  const meta = PATH_META[path.key as keyof typeof PATH_META]
+                  const forecast = getForecastLabel(path)
+                  const hint = getStudentForecastHint(path.key, path.visible_trend)
+                  const playerCount = players.filter((p) => p.current_path_id === path.id).length
+                  const isSurging = path.visible_trend === 'surging'
+
+                  return (
+                    <div key={path.id} className={`flex flex-col gap-2 group ${isSurging ? 'surge-active' : ''} transition-all duration-500`}>
+                      <div className="flex items-end justify-between mb-1">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl ${meta.bgClass} flex items-center justify-center text-2xl shrink-0 border ${meta.borderClass} shadow-lg`}>
+                            {meta.icon}
+                          </div>
+                          <div>
+                            <div className="flex items-baseline gap-3">
+                              <h3 className="font-bold text-white text-xl">{meta.name}</h3>
+                              <span className="text-sm text-slate-400">{playerCount} player{playerCount !== 1 ? 's' : ''}</span>
+                            </div>
+                            <p className="text-xs text-slate-500 mt-0.5">{hint}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${forecast.color} ${meta.bgClass} border ${meta.borderClass}`}>
+                            {forecast.arrow} {forecast.label}
+                          </div>
+                          <span className="text-3xl font-black text-white tabular-nums w-20 text-right">
+                            {path.current_value.toFixed(1)}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Value bar */}
+                      <div className="h-8 rounded-2xl bg-white/5 overflow-hidden shadow-inner relative border border-white/5">
+                        <div
+                          className="h-full rounded-2xl transition-all duration-1000 ease-out relative"
+                          style={{
+                            width: `${Math.min(100, (path.current_value / 300) * 100)}%`,
+                            backgroundColor: meta.color,
+                            boxShadow: `0 0 20px ${meta.color}40`,
+                          }}
+                        >
+                          {isSurging && <div className="absolute inset-0 bg-white/20 animate-pulse" />}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/10" />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           )}
         </div>
 
